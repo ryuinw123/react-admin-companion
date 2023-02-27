@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import mapboxgl from "mapbox-gl";
+import * as turf from "@turf/turf";
 import useAxios from "../../utils/useAxios";
 import "./ProtectedPage.css";
 import building from "../../images/icons/type_building.png";
@@ -9,6 +10,7 @@ import restaurant from "../../images/icons/type_restaurant.png";
 import room from "../../images/icons/type_room.png";
 import school from "../../images/icons/type_school.png";
 import shop from "../../images/icons/type_shop.png";
+import SearchBar from "../../components/searchbar/SearchBar";
 
 mapboxgl.accessToken =
   "pk.eyJ1Ijoicnl1aW53MTIzIiwiYSI6ImNsODV5M21odjB0dXAzbm9lZDhnNXVoY2UifQ.IiTAr5ITOUcCVjPjWiRe1w";
@@ -123,12 +125,18 @@ function ProtectedPage() {
   //Initilize Map
   useEffect(() => {
     if (!map.current) return; // wait for map to initialize
-    map.current.on("move", () => {
+    /*map.current.on("move", () => {
       setLng(map.current.getCenter().lng.toFixed(4));
       setLat(map.current.getCenter().lat.toFixed(4));
       setZoom(map.current.getZoom().toFixed(2));
-    });
+    });*/
+
     map.current.on("click", "markers", (e) => {
+      map.current.flyTo({
+        center: e.features[0].geometry.coordinates,
+        duration: 2000,
+      });
+
       // Copy coordinates array.
 
       const coordinates = e.features[0].geometry.coordinates.slice();
@@ -161,13 +169,27 @@ function ProtectedPage() {
     });
 
     map.current.on("click", "events", (e) => {
+      console.log(e.features[0].geometry.coordinates)
+      const center = turf.center(
+        turf.polygon(e.features[0].geometry.coordinates)
+      );
+      const centerCoordinates = center.geometry.coordinates;
+
+      map.current.flyTo({
+        center: centerCoordinates,
+        duration: 2000,
+      });
+
       // Copy coordinates array.
       const coordinates = e.features[0].geometry.coordinates.slice();
       const description = e.features[0].properties.description;
+      const id = e.features[0].properties.event_id;
 
       new mapboxgl.Popup()
         .setLngLat(e.lngLat)
-        .setHTML(e.features[0].properties.eventname)
+        .setHTML(
+          `<div> ${description}<a href="/event/${id}"> <button> Edit </button></a> </div>`
+        )
         .addTo(map.current);
 
       console.log(coordinates);
@@ -187,6 +209,7 @@ function ProtectedPage() {
     const getMarkerInformation = async () => {
       try {
         const response = await api.get("/marker/");
+        console.log(response.data);
 
         setMarkerInformation(response.data);
         console.log(createMarkerFeatureCollection(response.data));
@@ -298,13 +321,57 @@ function ProtectedPage() {
     });
   }, [map, eventInformation]);
 
+  const onSearchBarClick = (item) => {
+    
+    if (item.eventname) {
+      const polygon = JSON.parse(item.polygon)
+      polygon.push(polygon[0])
+      console.log([polygon])
+      const center = turf.center(turf.polygon([polygon]));
+      const centerCoordinates = center.geometry.coordinates;
+
+      map.current.flyTo({
+        center: centerCoordinates,
+        duration: 2000,
+        zoom: 4,
+      });
+      new mapboxgl.Popup()
+        .setLngLat(centerCoordinates)
+        .setHTML(
+          `<div> ${item.description}<a href="/event/${item.event_id}"> <button> Edit </button></a> </div>`
+        )
+        .addTo(map.current);
+
+    } else {
+
+      const coordinates = [item.longitude,item.latitude]
+
+      map.current.flyTo({
+        center: coordinates,
+        duration: 2000,
+        zoom: 4,
+      });
+
+      new mapboxgl.Popup()
+        .setLngLat(coordinates)
+        .setHTML(
+          `<div> ${item.description}<a href="/marker/${item.id}"> <button> Edit </button></a> </div>`
+        )
+        .addTo(map.current);
+    }
+  };
+
   return (
     <div className="container">
       <h1>Projected Page</h1>
       <p>{res}</p>
       <div className="position-relative">
         <div className="sidebar position-absolute">
-          Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
+          <SearchBar
+            placeholder="ค้นหา"
+            data={[...markerInformation, ...eventInformation]}
+            onSearchBarClick={onSearchBarClick}
+          />
         </div>
         <div ref={mapContainer} className="map-container" />
       </div>

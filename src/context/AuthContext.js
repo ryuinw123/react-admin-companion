@@ -45,6 +45,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   const registerUser = async (username, password, password2) => {
+    let data = JSON.stringify({
+      username,
+      password,
+      password2
+    })
     const response = await fetch("http://192.168.2.40:8000/api/register/", {
       method: "POST",
       headers: {
@@ -60,6 +65,7 @@ export const AuthProvider = ({ children }) => {
       history.push("/login");
     } else {
       alert("Something went wrong!");
+      console.log(data)
     }
   };
 

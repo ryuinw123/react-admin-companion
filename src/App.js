@@ -10,6 +10,7 @@ import Login from "./views/loginpage/loginPage";
 import Register from "./views/registerpage/registerPage";
 import ProtectedPage from "./views/protectedpage/ProtectedPage";
 import EditMarker from "./views/editmarkerpage/editMarkerPage";
+import EditEvent from "./views/editeventpage/EditEventPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Switch>
             <PrivateRoute component={ProtectedPage} path="/protected" exact />
             <PrivateRoute component={EditMarker} path="/marker/:id" />
+            <PrivateRoute component={EditEvent} path="/event/:id" />
             <Route component={Login} path="/login" />
             <Route component={Register} path="/register" />
             <Route component={Home} path="/" />
