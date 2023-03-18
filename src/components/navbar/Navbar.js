@@ -35,6 +35,11 @@ const Navbar = () => {
                     ProtectedPage
                   </Link>
                 </li>
+                <li className="nav-item">
+                <Link className="nav-link" to="/alert">
+                    AlertPage
+                  </Link>
+                </li>
                 <button onClick={logoutUser}>Logout</button>
               </>
             ) : (

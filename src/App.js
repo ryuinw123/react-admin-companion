@@ -11,6 +11,7 @@ import Register from "./views/registerpage/registerPage";
 import ProtectedPage from "./views/protectedpage/ProtectedPage";
 import EditMarker from "./views/editmarkerpage/editMarkerPage";
 import EditEvent from "./views/editeventpage/EditEventPage";
+import AlertPage from "./views/alertpage/AlertPage";
 
 function App() {
   return (
@@ -18,12 +19,13 @@ function App() {
         <AuthProvider>
           <Navbar />
           <Switch>
-            <PrivateRoute component={ProtectedPage} path="/protected" exact />
+            <PrivateRoute component={ProtectedPage} path="/protected"/>
             <PrivateRoute component={EditMarker} path="/marker/:id" />
             <PrivateRoute component={EditEvent} path="/event/:id" />
+            <PrivateRoute component={AlertPage} path = "/alert" />
             <Route component={Login} path="/login" />
             <Route component={Register} path="/register" />
-            <Route component={Home} path="/" />
+            <Route component={Home} path="/" exact/>
           </Switch>
         </AuthProvider>
         <Footer />
