@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import ImageUploading from "react-images-uploading";
 import useAxios from "../../utils/useAxios";
 import "./editMarkerPage.css";
@@ -11,6 +12,36 @@ const EditMarker = ({ match }) => {
     date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
     const formattedDate = date.toISOString().slice(0, 16);
     return formattedDate;
+  }
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const [notification, setNotification] = useState(
+    JSON.parse(queryParams.get("notification"))
+  );
+
+  function updateReport() {
+    Swal.fire({
+      title: "ยืนยันการกระทำ",
+      showConfirmButton: true,
+      showCancelButton: true,
+      confirmButtonText: "OK",
+      cancelButtonText: "Cancel",
+      icon: "warning",
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        api
+          .put(`/updatemarkerreport/${notification.report_marker_id}`, {
+            enable: 0,
+          })
+          .then(() => {
+            setNotification("");
+            Swal.close();
+            Swal.fire("อัพเดทข้อมูลสำเร็จ", "", "success");
+          })
+          .catch((e) => Swal.fire(" อัพเดทข้อมูลล้มเหลว", "", "error"));
+      } else Swal.fire(" ยกเลิก", "", "error");
+    });
   }
 
   function deleteComments(id) {
@@ -81,7 +112,7 @@ const EditMarker = ({ match }) => {
     const formData = new FormData();
     formData.append("file", image.file);
     formData.append("marker_id", markerId);
-  
+
     try {
       const response = await api.post("/uploadImages/", formData);
       return response.data;
@@ -94,7 +125,7 @@ const EditMarker = ({ match }) => {
   function uploadimage() {
     if (bImages.length + images.length > 5) {
       Swal.fire("ห้ามเพิ่มเกิน 5 รูป", "", "error");
-      return
+      return;
     }
     Swal.fire({
       title: "ยืนยันการกระทำ",
@@ -105,17 +136,16 @@ const EditMarker = ({ match }) => {
       icon: "warning",
     }).then(async (result) => {
       /* Read more about isConfirmed, isDenied below */
-      let uImages = []
+      let uImages = [];
 
       if (result.isConfirmed) {
         try {
           for (let i = 0; i < images.length; i++) {
             let data = await handleImageUpload(images[i], match.params.id);
-            uImages.push(data)
+            uImages.push(data);
           }
-          setbImages([...bImages, ...uImages])
-          setImages([])
-
+          setbImages([...bImages, ...uImages]);
+          setImages([]);
         } catch (error) {
           Swal.fire("อัพเดทข้อมูลล้มเหลว", "", "error");
         }
@@ -200,6 +230,34 @@ const EditMarker = ({ match }) => {
     <div className="container mt-4">
       <div className="border border-primary">
         <h1 className="mb-4">Edit Marker</h1>
+        {notification && (
+          <div className="card bg-light mb-3">
+            <div className="card-header">Notification</div>
+            <div className="card-body">
+              <p className="card-text">
+                A marker with ID <strong>{notification.id}</strong> has been
+                reported for the following reason:{" "}
+                <strong>{notification.reason}</strong>
+              </p>
+              <p className="card-text">
+                Details: <strong>{notification.details}</strong>
+              </p>
+              <p className="card-text">
+                Reported by user <strong>{notification.created_user}</strong>
+              </p>
+              <p className="card-text">
+                Created on:{" "}
+                <strong>
+                  {new Date(notification.created_time).toLocaleString()}
+                </strong>
+              </p>
+              <button onClick={updateReport} className="btn btn-success">
+                Complete
+              </button>
+            </div>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="name">Name</label>

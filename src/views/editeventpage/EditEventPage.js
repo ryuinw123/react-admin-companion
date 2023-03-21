@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect  } from "react";
+import { useLocation } from "react-router-dom";
 import ImageUploading from "react-images-uploading";
 import useAxios from "../../utils/useAxios";
 import Swal from "sweetalert2";
@@ -10,6 +11,38 @@ const EditEvent = ({ match }) => {
     date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
     const formattedDate = date.toISOString().slice(0, 16);
     return formattedDate;
+  }
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const [notification, setNotification] = useState(
+    JSON.parse(queryParams.get("notification"))
+  );
+
+
+  function updateReport() {
+    Swal.fire({
+      title: "ยืนยันการกระทำ",
+      showConfirmButton: true,
+      showCancelButton: true,
+      confirmButtonText: "OK",
+      cancelButtonText: "Cancel",
+      icon: "warning",
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        api
+          .put(`/updateeventreport/${notification.report_event_id}`, {
+            enable: 0,
+          })
+          .then(() => {
+            setNotification("");
+            Swal.close();
+            Swal.fire("อัพเดทข้อมูลสำเร็จ", "", "success");
+          })
+          .catch((e) => Swal.fire(" อัพเดทข้อมูลล้มเหลว", "", "error"));
+      } else Swal.fire(" ยกเลิก", "", "error");
+    });
   }
 
 
@@ -178,6 +211,35 @@ const EditEvent = ({ match }) => {
     <div className="container mt-4">
       <div className="border border-primary">
         <h1 className="mb-4">Edit Event</h1>
+
+        {notification && (
+          <div className="card bg-light mb-3">
+            <div className="card-header">Notification</div>
+            <div className="card-body">
+              <p className="card-text">
+                An Event with ID <strong>{notification.event}</strong> has been
+                reported for the following reason:{" "}
+                <strong>{notification.reason}</strong>
+              </p>
+              <p className="card-text">
+                Details: <strong>{notification.details}</strong>
+              </p>
+              <p className="card-text">
+                Reported by user <strong>{notification.created_user}</strong>
+              </p>
+              <p className="card-text">
+                Created on:{" "}
+                <strong>
+                  {new Date(notification.created_time).toLocaleString()}
+                </strong>
+              </p>
+              <button onClick={updateReport} className="btn btn-success">
+                Complete
+              </button>
+            </div>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="eventname">Event Name</label>
