@@ -1,7 +1,7 @@
 function UserInfo({ user }) {
   return (
-    <div>
-      <h1>Hello, {user.username}</h1>
+    <div className="d-inline-block">
+      <h3 className="fw-bold">{user.username}</h3>
     </div>
   );
 }

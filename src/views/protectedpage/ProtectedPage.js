@@ -1,4 +1,6 @@
 import { useEffect, useState, useRef } from "react";
+import AuthContext from "../../context/AuthContext";
+import { useContext } from "react";
 import mapboxgl from "mapbox-gl";
 import * as turf from "@turf/turf";
 import useAxios from "../../utils/useAxios";
@@ -11,11 +13,14 @@ import room from "../../images/icons/type_room.png";
 import school from "../../images/icons/type_school.png";
 import shop from "../../images/icons/type_shop.png";
 import SearchBar from "../../components/searchbar/SearchBar";
+import UserInfo from "../../components/userinfo/UserInfo";
 
 mapboxgl.accessToken =
   "pk.eyJ1Ijoicnl1aW53MTIzIiwiYSI6ImNsODV5M21odjB0dXAzbm9lZDhnNXVoY2UifQ.IiTAr5ITOUcCVjPjWiRe1w";
 
 function ProtectedPage() {
+  const { user } = useContext(AuthContext);
+
   const imageUrls = {
     ตึก: building,
     หอพัก: dorm,
@@ -26,10 +31,12 @@ function ProtectedPage() {
     ร้านค้า: shop,
   };
 
-  const [res, setRes] = useState("");
   const api = useAxios();
   const [markerInformation, setMarkerInformation] = useState([]);
   const [eventInformation, setEventInformation] = useState([]);
+  const [navTabs, setNavTabs] = useState(0);
+
+
 
   function createEventFeatureCollection(events) {
     const features = events.map((event) => {
@@ -93,25 +100,13 @@ function ProtectedPage() {
       },
     };
   }
-  //test API
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get("/test/");
-        setRes(response.data.response);
-      } catch {
-        setRes("Something went wrong");
-      }
-    };
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const [lng, setLng] = useState(-70.9);
-  const [lat, setLat] = useState(42.35);
-  const [zoom, setZoom] = useState(9);
+  const [lng, setLng] = useState(100.7794983025522);
+  const [lat, setLat] = useState(13.730180723212523);
+  const [zoom, setZoom] = useState(15);
+  
   //Initilize Map
   useEffect(() => {
     if (map.current) return; // initialize map only once
@@ -169,7 +164,7 @@ function ProtectedPage() {
     });
 
     map.current.on("click", "events", (e) => {
-      console.log(e.features[0].geometry.coordinates)
+      console.log(e.features[0].geometry.coordinates);
       const center = turf.center(
         turf.polygon(e.features[0].geometry.coordinates)
       );
@@ -222,7 +217,7 @@ function ProtectedPage() {
 
   //Get Event Information
   useEffect(() => {
-    const getMarkerInformation = async () => {
+    const getEventInformation = async () => {
       try {
         const response = await api.get("/event/");
 
@@ -232,7 +227,7 @@ function ProtectedPage() {
         console.log(e);
       }
     };
-    getMarkerInformation();
+    getEventInformation();
   }, []);
 
   //Add Image top Map And style Layer
@@ -267,6 +262,8 @@ function ProtectedPage() {
       });*/
       loadImage(imageUrls, e.target);
 
+      console.log("Add Marker Source");
+
       e.target.addSource(
         "markers-source",
         createMarkerFeatureCollection(markerInformation)
@@ -295,6 +292,7 @@ function ProtectedPage() {
       map.current.removeSource("events-source");
 
     map.current.on("load", (e) => {
+      console.log("Add Event Source");
       e.target.addSource(
         "events-source",
         createEventFeatureCollection(eventInformation)
@@ -322,11 +320,10 @@ function ProtectedPage() {
   }, [map, eventInformation]);
 
   const onSearchBarClick = (item) => {
-    
     if (item.eventname) {
-      const polygon = JSON.parse(item.polygon)
-      polygon.push(polygon[0])
-      console.log([polygon])
+      const polygon = JSON.parse(item.polygon);
+      polygon.push(polygon[0]);
+      console.log([polygon]);
       const center = turf.center(turf.polygon([polygon]));
       const centerCoordinates = center.geometry.coordinates;
 
@@ -341,10 +338,8 @@ function ProtectedPage() {
           `<div> ${item.description}<a href="/event/${item.event_id}"> <button> Edit </button></a> </div>`
         )
         .addTo(map.current);
-
     } else {
-
-      const coordinates = [item.longitude,item.latitude]
+      const coordinates = [item.longitude, item.latitude];
 
       map.current.flyTo({
         center: coordinates,
@@ -361,21 +356,96 @@ function ProtectedPage() {
     }
   };
 
+  useEffect(() => {
+    if (!map.current) return;
+    if (navTabs === 0) {
+      if (map.current.getLayer("events-outline")) map.current.setLayoutProperty("events-outline", "visibility", "visible");
+      if (map.current.getLayer("events")) map.current.setLayoutProperty("events", "visibility", "visible");
+      if (map.current.getLayer("markers")) map.current.setLayoutProperty("markers", "visibility", "visible");
+      return;
+    }
+    if (navTabs === 1){
+      if (map.current.getLayer("events-outline")) map.current.setLayoutProperty("events-outline", "visibility", "none");
+      if (map.current.getLayer("events")) map.current.setLayoutProperty("events", "visibility", "none");
+      if (map.current.getLayer("markers")) map.current.setLayoutProperty("markers", "visibility", "visible");
+      return;
+    }
+
+    if (navTabs === 2) {
+      if (map.current.getLayer("events-outline")) map.current.setLayoutProperty("events-outline", "visibility", "visible");
+      if (map.current.getLayer("events")) map.current.setLayoutProperty("events", "visibility", "visible");
+      if (map.current.getLayer("markers")) map.current.setLayoutProperty("markers", "visibility", "none");
+      return;
+    }
+
+  } , [navTabs])
+
   return (
-    <div className="container">
-      <h1>Projected Page</h1>
-      <p>{res}</p>
-      <div className="position-relative">
-        <div className="sidebar position-absolute">
-          <SearchBar
-            placeholder="ค้นหา"
-            data={[...markerInformation, ...eventInformation]}
-            onSearchBarClick={onSearchBarClick}
-          />
+    <>
+      <div className="border-bottom">
+        <div className="container protected-text mt-3">
+          <h1 className="fw-bold">แผนที่</h1>
+          <h3 className="ms-4">
+            ยินดีต้อนรับ แอดมิน <UserInfo user={user} />
+          </h3>
         </div>
-        <div ref={mapContainer} className="map-container" />
       </div>
-    </div>
+      <div className="container protected-text">
+        <div class="d-flex justify-content-between protected-list">
+          <ul className="nav my-2">
+            <li className={`map-nav ${navTabs == 0 ? "active" : ""}`}>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setNavTabs(0);
+                }}
+              >
+                ทั้งหมด
+              </button>
+            </li>
+            <li className={`map-nav ${navTabs == 1 ? "active" : ""}`}>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setNavTabs(1);
+                }}
+              >
+                ปักหมุด
+              </button>
+            </li>
+            <li className={`map-nav ${navTabs == 2 ? "active" : ""}`}>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setNavTabs(2);
+                }}
+              >
+                อีเวนท์
+              </button>
+            </li>
+          </ul>
+          <div className="my-2 position-relative" style={{zIndex:"1"}}>
+            <div className="position-absolute end-0">
+              <SearchBar
+                placeholder="ค้นหา"
+                data={
+                  navTabs === 0
+                    ? [...markerInformation, ...eventInformation]
+                    : navTabs === 1
+                    ? markerInformation
+                    : eventInformation
+                }
+                onSearchBarClick={onSearchBarClick}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div ref={mapContainer} className="map-container" />
+        </div>
+      </div>
+    </>
   );
 }
 

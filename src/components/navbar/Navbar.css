@@ -1,0 +1,30 @@
+.navbar-icon {
+  color: #4d5e80;
+  padding-top: 0.3125rem;
+  padding-bottom: 0.3125rem;
+  margin-right: 1rem;
+  font-size: 1.25rem;
+  text-decoration: none;
+  white-space: nowrap;
+  font-weight: bold;
+  font-family: Roboto;
+}
+
+.navbar-text {
+  color: #7d8fb3 !important;
+  font-weight: bold;
+  font-family: Roboto;
+}
+
+.logout-text {
+  color: #ff5e00 !important;
+  font-weight: bold;
+  font-family: Roboto;
+}
+
+.left-input {
+  width: 65px;
+}
+.right-input {
+  width: 65px;
+}

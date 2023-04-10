@@ -1,0 +1,24 @@
+.login-text {
+    color : #7D8FB3;
+    font-family: Roboto;
+}
+
+.default-login-text {
+    color : #4D5E80;
+    font-family: Roboto;
+}
+
+.placeholder-input::placeholder {
+    color:#7D8FB3;
+    font-family: Roboto;
+}
+
+.kmitl-button {
+    background-color: #FF5E00;
+    color : white;
+    border-radius: 10px;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 1;
+}

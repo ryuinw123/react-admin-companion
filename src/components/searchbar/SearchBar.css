@@ -5,28 +5,28 @@
   .search input {
     background-color: white;
     border: 0;
-    border-radius: 2px;
+    border-radius: 0px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
     font-size: 18px;
     padding: 15px;
-    height: 30px;
     width: 300px;
   }
   
-  .searchIcon {
-    height: 60px;
-    width: 50px;
+  .left-input {
+    padding: 15px 25px;
     background-color: white;
-    display: grid;
-    place-items: center;
+    border-radius: 20px 0 0 20px;
+  }
+
+  .right-input {
+    padding: 15px 25px;
+    background-color: white;
+    border-radius: 0px 20px 20px 0px;
   }
   
   input:focus {
     outline: none;
-  }
-  .searchIcon svg {
-    font-size: 35px;
   }
   
   .dataResult {

@@ -1,3 +1,61 @@
 .ant-row:nth-child(2) {
     display: none;
 }
+
+.edit-marker-header {
+    color : #7D8FB3;
+}
+
+.edit-list button {
+    background-color: transparent!important;
+    color: #7D8FB3!important;
+    font-family: Roboco;
+    font-weight: bold;
+    padding: 0px 20px 15px 20px;
+}
+
+.edit-list .active {
+    color: #FF5E00!important;
+    border-bottom: solid 2px #FF5E00;
+    border-radius: 0;
+}
+
+.edit-marker-text {
+    color : #4D5E80;
+    font: Roboco;
+}
+.placeholder-input {
+    color : #7D8FB3;
+    font-family: Roboto;
+}
+
+.placeholder-input::placeholder {
+    color:#7D8FB3;
+    font-family: Roboto;
+}
+
+.kmitl-button {
+    background-color: #FF5E00;
+    color : white;
+    border-radius: 10px;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 1;
+    border-color: transparent;
+}
+
+.default-kmitl-button {
+    background-color: white;
+    color: #6B7A99;
+    border-radius: 10px;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 1;
+    border-color: transparent;
+}
+
+.kmitl-color {
+    color: #FF5E00;
+}

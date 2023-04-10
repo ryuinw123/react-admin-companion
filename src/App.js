@@ -1,6 +1,5 @@
 import React from "react";
 import "./index.css";
-import Footer from "./components/footer/Footer";
 import Navbar from "./components/navbar/Navbar";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import PrivateRoute from "./utils/PrivateRoute";
@@ -12,6 +11,7 @@ import ProtectedPage from "./views/protectedpage/ProtectedPage";
 import EditMarker from "./views/editmarkerpage/editMarkerPage";
 import EditEvent from "./views/editeventpage/EditEventPage";
 import AlertPage from "./views/alertpage/AlertPage";
+import aboutPage from "./views/aboutpage/aboutPage";
 
 function App() {
   return (
@@ -26,9 +26,9 @@ function App() {
             <Route component={Login} path="/login" />
             <Route component={Register} path="/register" />
             <Route component={Home} path="/" exact/>
+            <Route component={aboutPage} path="/about" exact/>
           </Switch>
         </AuthProvider>
-        <Footer />
     </Router>
   );
 }

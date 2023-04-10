@@ -227,247 +227,353 @@ const EditMarker = ({ match }) => {
   };
 
   return (
-    <div className="container mt-4">
-      <div className="border border-primary">
-        <h1 className="mb-4">Edit Marker</h1>
-        {notification && (
-          <div className="card bg-light mb-3">
-            <div className="card-header">Notification</div>
-            <div className="card-body">
-              <p className="card-text">
-                A marker with ID <strong>{notification.id}</strong> has been
-                reported for the following reason:{" "}
-                <strong>{notification.reason}</strong>
-              </p>
-              <p className="card-text">
-                Details: <strong>{notification.details}</strong>
-              </p>
-              <p className="card-text">
-                Reported by user <strong>{notification.created_user}</strong>
-              </p>
-              <p className="card-text">
-                Created on:{" "}
-                <strong>
-                  {new Date(notification.created_time).toLocaleString()}
-                </strong>
-              </p>
-              <button onClick={updateReport} className="btn btn-success">
-                Complete
-              </button>
-            </div>
-          </div>
-        )}
+    <>
+      <div className="border-bottom">
+        <div className="container protected-text mt-3">
+          <h1 className="mb-4 edit-marker-header ps-3">แก้ไขปักหมุด</h1>
+        </div>
+      </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="name">Name</label>
-            <input
-              type="text"
-              className="form-control"
-              id="name"
-              name="name"
-              value={marker.name}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="place">Place</label>
-            <input
-              type="text"
-              className="form-control"
-              id="place"
-              name="place"
-              value={marker.place}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="address">Address</label>
-            <input
-              type="text"
-              className="form-control"
-              id="address"
-              name="address"
-              value={marker.address}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="description">Description</label>
-            <textarea
-              className="form-control"
-              id="description"
-              name="description"
-              rows="3"
-              value={marker.description}
-              onChange={handleChange}
-            ></textarea>
-          </div>
-          <div className="form-group">
-            <label htmlFor="type">Type</label>
-            <select
-              type="text"
-              name="type"
-              id="type"
-              className="form-control"
-              value={marker.type}
-              onChange={handleChange}
+      <div className="d-flex flex-column justify-content-center align-items-center border-bottom mt-3">
+        <ul class="nav nav-pills edit-list" id="pills-tab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="pills-home-tab"
+              data-bs-toggle="pill"
+              data-bs-target="#pills-home"
+              type="button"
+              role="tab"
+              aria-controls="pills-home"
+              aria-selected="true"
             >
-              <option value="ทั่วไป">ทั่วไป</option>
-              <option value="อาคารเรียน">อาคารเรียน</option>
-              <option value="ร้านอาหาร">ร้านอาหาร</option>
-              <option value="ห้องเรียน">ห้องเรียน</option>
-              <option value="ตึก">ตึก</option>
-              <option value="หอพัก">หอพัก</option>
-              <option value="ร้านค้า">ร้านค้า</option>
-            </select>
-          </div>
-          <div className="form-check">
-            <label htmlFor="enable" className="form-check-label">
-              Enable
-            </label>
-            <input
-              type="checkbox"
-              name="enable"
-              id="enable"
-              className="form-check-input"
-              checked={marker.enable}
-              onChange={(e) =>
-                setMarker((prevMarker) => ({
-                  ...prevMarker,
-                  enable: e.target.checked ? 1 : 0,
-                }))
-              }
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="createtime">Create Time</label>
-            <input
-              type="datetime-local"
-              name="createtime"
-              id="createtime"
-              className="form-control"
-              value={marker.createtime}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="created_user">Created By</label>
-            <input
-              type="text"
-              name="created_user"
-              id="created_user"
-              className="form-control"
-              value={marker.created_user}
-              onChange={handleChange}
-            />
-          </div>
-
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-        </form>
-      </div>
-      <div className="border border-success">
-        <div>
-          {bImages.length > 0 && <label htmlFor="images">Images</label>}
-          {bImages?.map((image) => (
-            <div key={image.id} className="image-item">
-              <img src={image.dataURL} alt="" width="100" />
-              <div className="image-item__btn-wrapper">
-                <button onClick={() => onBImageRemove(image.id)}>Remove</button>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div>
-          <label htmlFor="images">Upload Images</label>
-          <ImageUploading
-            multiple
-            value={images}
-            onChange={onChange}
-            maxNumber={maxNumber}
-            dataURLKey="data_url"
-          >
-            {({
-              imageList,
-              onImageUpload,
-              onImageRemoveAll,
-              onImageUpdate,
-              onImageRemove,
-              isDragging,
-              dragProps,
-            }) => (
-              // write your building UI
-              <div className="upload__image-wrapper">
-                <button
-                  className="btn btn-success"
-                  style={isDragging ? { color: "red" } : undefined}
-                  onClick={onImageUpload}
-                  {...dragProps}
-                >
-                  Click or Drop here
-                </button>
-                &nbsp;
-                <button className="btn btn-success" onClick={onImageRemoveAll}>
-                  Remove all images
-                </button>
-                {imageList.map((image, index) => (
-                  <div key={index} className="image-item">
-                    <img src={image["data_url"]} alt="" width="100" />
-                    <div className="image-item__btn-wrapper">
-                      <button
-                        className="btn btn-success"
-                        onClick={() => onImageUpdate(index)}
-                      >
-                        Update
-                      </button>
-                      <button
-                        className="btn btn-success"
-                        onClick={() => onImageRemove(index)}
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </ImageUploading>
-          <button
-            type="submit"
-            className="btn btn-success"
-            onClick={(e) => {
-              e.preventDefault();
-              uploadimage();
-            }}
-          >
-            Submit
-          </button>
-        </div>
-      </div>
-      <div className="border border-danger">
-        <label htmlFor="comments">Comments</label>
-        <ul>
-          {comments.map((comment, _) => (
-            <li key={comment.comment_id}>
-              {comment.content}
-              <button
-                className="btn btn-danger btn-sm ml-4"
-                onClick={(e) => {
-                  e.preventDefault();
-                  deleteComments(comment.comment_id);
-                }}
-              >
-                Delete
-              </button>
-            </li>
-          ))}
+              รายละเอียด
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="pills-profile-tab"
+              data-bs-toggle="pill"
+              data-bs-target="#pills-profile"
+              type="button"
+              role="tab"
+              aria-controls="pills-profile"
+              aria-selected="false"
+            >
+              ความคิดเห็น
+            </button>
+          </li>
         </ul>
       </div>
-    </div>
+
+      <div className="container mt-4 mb-5">
+        <div className="d-flex flex-column justify-content-center align-items-center">
+          <div class="col-8 edit-marker-text">
+            <div class="tab-content" id="pills-tabContent">
+              <div
+                class="tab-pane fade show active"
+                id="pills-home"
+                role="tabpanel"
+                aria-labelledby="pills-home-tab"
+              >
+                <div>
+                  {notification && (
+                    <div className="card mb-3 bg-white">
+                      <div className="card-body">
+                        <p className="card-text">
+                          <b>การรายงาน</b>
+                        </p>
+                        <p className="card-text">
+                          ปักหมุด ID <strong>{notification.id}</strong>{" "}
+                          ถูกรายงานด้วยเหตุผล:{" "}
+                          <strong>{notification.reason}</strong>
+                        </p>
+                        <p className="card-text">
+                          รายละเอียด: <strong>{notification.details}</strong>
+                        </p>
+                        <p className="card-text">
+                          โดยผู้ใช้ <strong>{notification.created_user}</strong>
+                        </p>
+                        <p className="card-text">
+                          เมื่อเวลา:{" "}
+                          <strong>
+                            {new Date(
+                              notification.created_time
+                            ).toLocaleString()}
+                          </strong>
+                        </p>
+                        <div className="text-end">
+                          {" "}
+                          <button
+                            onClick={updateReport}
+                            className="kmitl-button p-3"
+                          >
+                            ยืนยันการตรวจสอบ
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <form
+                    onSubmit={handleSubmit}
+                    className="border py-3 px-4 fw-bold"
+                  >
+                    <div className="form-group">
+                      <label htmlFor="name">ชื่อ</label>
+                      <input
+                        type="text"
+                        className="form-control placeholder-input"
+                        id="name"
+                        name="name"
+                        value={marker.name}
+                        placeholder="ชื่อปักหมุด"
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="place">สถานที่</label>
+                      <input
+                        type="text"
+                        className="form-control placeholder-input"
+                        id="place"
+                        name="place"
+                        placeholder="สถานที่"
+                        value={marker.place}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="address">ที่อยู่</label>
+                      <input
+                        type="text"
+                        className="form-control placeholder-input"
+                        id="address"
+                        name="address"
+                        placeholder="ที่อยู่"
+                        value={marker.address}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="description">รายละเอียด</label>
+                      <textarea
+                        className="form-control placeholder-input"
+                        id="description"
+                        name="description"
+                        placeholder="รายละเอียด"
+                        rows="3"
+                        value={marker.description}
+                        onChange={handleChange}
+                      ></textarea>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="type">ประเภท</label>
+                      <select
+                        type="text"
+                        name="type"
+                        id="type"
+                        className="form-control placeholder-input"
+                        placeholder="ประเภทปักหมุด"
+                        value={marker.type}
+                        onChange={handleChange}
+                      >
+                        <option value="ทั่วไป">ทั่วไป</option>
+                        <option value="อาคารเรียน">อาคารเรียน</option>
+                        <option value="ร้านอาหาร">ร้านอาหาร</option>
+                        <option value="ห้องเรียน">ห้องเรียน</option>
+                        <option value="ตึก">ตึก</option>
+                        <option value="หอพัก">หอพัก</option>
+                        <option value="ร้านค้า">ร้านค้า</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="createtime">Create Time</label>
+                      <input
+                        type="datetime-local"
+                        name="createtime"
+                        id="createtime"
+                        className="form-control placeholder-input"
+                        value={marker.createtime}
+                        onChange={handleChange}
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="created_user">Created By</label>
+                      <input
+                        type="text"
+                        name="created_user"
+                        id="created_user"
+                        className="form-control placeholder-input"
+                        value={marker.created_user}
+                        onChange={handleChange}
+                      />
+                    </div>
+
+                    <div>
+                      <p htmlFor="enable" className="my-0">
+                        สถานะการเปิดใช้งาน
+                      </p>
+                      <input
+                        type="checkbox"
+                        name="enable"
+                        id="enable"
+                        className="form-check-input mx-2"
+                        checked={marker.enable}
+                        onChange={(e) =>
+                          setMarker((prevMarker) => ({
+                            ...prevMarker,
+                            enable: e.target.checked ? 1 : 0,
+                          }))
+                        }
+                      />
+                    </div>
+                    <div className="text-end">
+                      <button type="submit" className="kmitl-button p-3">
+                        บันทึกข้อมูล
+                      </button>
+                    </div>
+                  </form>
+                </div>
+                <div className="border py-3 px-4">
+                  <div>
+                    <div>
+                      <ImageUploading
+                        multiple
+                        value={images}
+                        onChange={onChange}
+                        maxNumber={maxNumber}
+                        dataURLKey="data_url"
+                      >
+                        {({
+                          imageList,
+                          onImageUpload,
+                          onImageRemoveAll,
+                          onImageUpdate,
+                          onImageRemove,
+                          isDragging,
+                          dragProps,
+                        }) => (
+                          // write your building UI
+                          <div>
+                            <div className="d-flex justify-content-between edit-marker-text fw-bold">
+                              <p htmlFor="images">รูปภาพ</p>
+                              <div className="upload__image-wrapper">
+                                <button
+                                  className="default-kmitl-button py-3 px-2 mx-2"
+                                  style={
+                                    isDragging ? { color: "red" } : undefined
+                                  }
+                                  onClick={onImageUpload}
+                                  {...dragProps}
+                                >
+                                  เพิ่มรูปภาพ หรือ ลากวาง
+                                </button>
+                                <button
+                                  className="default-kmitl-button py-3 px-2 mx-2"
+                                  onClick={onImageRemoveAll}
+                                >
+                                  ลบรูปภาพทั้งหมด
+                                </button>
+                                <button
+                                  type="submit"
+                                  className="kmitl-button py-3 px-2 mx-2"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    uploadimage();
+                                  }}
+                                >
+                                  บันทึกรูปภาพ
+                                </button>
+                              </div>
+                            </div>
+                            <div className="row">
+                              <h3>ส่วนที่เพิ่ม</h3>
+                              {imageList.map((image, index) => (
+                                <div key={index} className="image-item col-3">
+                                  <img
+                                    src={image["data_url"]}
+                                    alt=""
+                                    width="100"
+                                  />
+                                  <div className="image-item__btn-wrapper">
+                                    <button
+                                      className="default-kmitl-button p-2"
+                                      onClick={() => onImageRemove(index)}
+                                    >
+                                      ลบรูปภาพนี้
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </ImageUploading>
+                    </div>
+                    <div className="row">
+                      {bImages?.map((image) => (
+                        <div key={image.id} className="image-item col-3">
+                          <div className="col-3">
+                            <img src={image.dataURL} alt="" width="100" />
+                          </div>
+                          <div className="image-item__btn-wrapper">
+                            <button
+                              className="default-kmitl-button p-2 my-2"
+                              onClick={() => onBImageRemove(image.id)}
+                            >
+                              ลบรูปภาพนี้
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="tab-pane fade"
+                id="pills-profile"
+                role="tabpanel"
+                aria-labelledby="pills-profile-tab"
+              >
+                <div className="border fw-bold">
+                  <p htmlFor="comments" className="edit-marker-header">
+                    ความคิดเห็นทั้งหมด
+                  </p>
+                  <ul>
+                    {comments.map((comment, _) => (
+                      <div className="row" key={comment.comment_id}>
+                        <div className="col-3 kmitl-color ">
+                          {comment.comment_student}
+                        </div>
+                        <div className="col-3">{comment.content}</div>
+                        <div className="col-3">
+                          {new Date(comment.createtime).toLocaleString()}
+                        </div>
+                        <div className="col-3">
+                          <button
+                            className="btn btn-danger btn-sm ml-4"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              deleteComments(comment.comment_id);
+                            }}
+                          >
+                            ลบความคิดเห็น
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 export default EditMarker;

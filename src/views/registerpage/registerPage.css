@@ -1,0 +1,24 @@
+.kmitl-button {
+    background-color: #FF5E00;
+    color : white;
+    border-radius: 10px;
+    font-family: Roboto;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.placeholder-input::placeholder {
+    color:#7D8FB3;
+    font-family: Roboto;
+}
+
+.register-text {
+    color : #7D8FB3;
+    font-family: Roboto;
+}
+
+.default-register-text {
+    color : #4D5E80;
+    font-family: Roboto;
+}
