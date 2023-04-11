@@ -390,7 +390,7 @@ function ProtectedPage() {
           </h3>
         </div>
       </div>
-      <div className="container protected-text">
+      <div className="container protected-text mb-5">
         <div class="d-flex justify-content-between protected-list">
           <ul className="nav my-2">
             <li className={`map-nav ${navTabs == 0 ? "active" : ""}`}>
