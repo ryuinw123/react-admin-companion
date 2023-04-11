@@ -137,6 +137,7 @@ function ProtectedPage() {
       const coordinates = e.features[0].geometry.coordinates.slice();
       const id = e.features[0].properties.id;
       const description = e.features[0].properties.description;
+      const name = e.features[0].properties.name;
 
       // Ensure that if the map is zoomed out such that multiple
       // copies of the feature are visible, the popup appears
@@ -148,7 +149,7 @@ function ProtectedPage() {
       new mapboxgl.Popup()
         .setLngLat(coordinates)
         .setHTML(
-          `<div> ${description}<a href="/marker/${id}"> <button> Edit </button></a> </div>`
+          `<div> ${name}<a href="/marker/${id}"> <button> Edit </button></a> </div>`
         )
         .addTo(map.current);
     });
@@ -179,11 +180,12 @@ function ProtectedPage() {
       const coordinates = e.features[0].geometry.coordinates.slice();
       const description = e.features[0].properties.description;
       const id = e.features[0].properties.event_id;
+      const eventname = e.features[0].properties.eventname;
 
       new mapboxgl.Popup()
         .setLngLat(e.lngLat)
         .setHTML(
-          `<div> ${description}<a href="/event/${id}"> <button> Edit </button></a> </div>`
+          `<div> ${eventname}<a href="/event/${id}"> <button> Edit </button></a> </div>`
         )
         .addTo(map.current);
 
@@ -335,7 +337,7 @@ function ProtectedPage() {
       new mapboxgl.Popup()
         .setLngLat(centerCoordinates)
         .setHTML(
-          `<div> ${item.description}<a href="/event/${item.event_id}"> <button> Edit </button></a> </div>`
+          `<div> ${item.eventname}<a href="/event/${item.event_id}"> <button> Edit </button></a> </div>`
         )
         .addTo(map.current);
     } else {
@@ -350,7 +352,7 @@ function ProtectedPage() {
       new mapboxgl.Popup()
         .setLngLat(coordinates)
         .setHTML(
-          `<div> ${item.description}<a href="/marker/${item.id}"> <button> Edit </button></a> </div>`
+          `<div> ${item.name}<a href="/marker/${item.id}"> <button> Edit </button></a> </div>`
         )
         .addTo(map.current);
     }
