@@ -14,6 +14,8 @@ import school from "../../images/icons/type_school.png";
 import shop from "../../images/icons/type_shop.png";
 import SearchBar from "../../components/searchbar/SearchBar";
 import UserInfo from "../../components/userinfo/UserInfo";
+import toilet from "../../images/icons/type_toilet.png"
+import bank from "../../images/icons/type_bank.png"
 
 mapboxgl.accessToken =
   "pk.eyJ1Ijoicnl1aW53MTIzIiwiYSI6ImNsODV5M21odjB0dXAzbm9lZDhnNXVoY2UifQ.IiTAr5ITOUcCVjPjWiRe1w";
@@ -22,13 +24,15 @@ function ProtectedPage() {
   const { user } = useContext(AuthContext);
 
   const imageUrls = {
-    ตึก: building,
+    สถานที่: building,
     หอพัก: dorm,
     ทั่วไป: pin,
     ร้านอาหาร: restaurant,
     ห้องเรียน: room,
     อาคารเรียน: school,
     ร้านค้า: shop,
+    ห้องน้ำ: toilet,
+    ธนาคาร: bank,
   };
 
   const api = useAxios();

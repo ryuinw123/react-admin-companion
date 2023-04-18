@@ -37,7 +37,7 @@ const Notification_Card = ({ data }) => {
       onClick={handleLinkClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="row border p-4"
+      className="row border p-4 "
       style={cardStyle}
     >
       <div className="col-1 text-center">
