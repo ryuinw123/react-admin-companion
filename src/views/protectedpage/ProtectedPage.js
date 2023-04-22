@@ -14,8 +14,8 @@ import school from "../../images/icons/type_school.png";
 import shop from "../../images/icons/type_shop.png";
 import SearchBar from "../../components/searchbar/SearchBar";
 import UserInfo from "../../components/userinfo/UserInfo";
-import toilet from "../../images/icons/type_toilet.png"
-import bank from "../../images/icons/type_bank.png"
+import toilet from "../../images/icons/type_toilet.png";
+import bank from "../../images/icons/type_bank.png";
 
 mapboxgl.accessToken =
   "pk.eyJ1Ijoicnl1aW53MTIzIiwiYSI6ImNsODV5M21odjB0dXAzbm9lZDhnNXVoY2UifQ.IiTAr5ITOUcCVjPjWiRe1w";
@@ -40,7 +40,7 @@ function ProtectedPage() {
   const [eventInformation, setEventInformation] = useState([]);
   const [navTabs, setNavTabs] = useState(0);
 
-
+  const [switchState, setSwitchState] = useState(1);
 
   function createEventFeatureCollection(events) {
     const features = events.map((event) => {
@@ -110,7 +110,7 @@ function ProtectedPage() {
   const [lng, setLng] = useState(100.7794983025522);
   const [lat, setLat] = useState(13.730180723212523);
   const [zoom, setZoom] = useState(15);
-  
+
   //Initilize Map
   useEffect(() => {
     if (map.current) return; // initialize map only once
@@ -268,8 +268,6 @@ function ProtectedPage() {
       });*/
       loadImage(imageUrls, e.target);
 
-      console.log("Add Marker Source");
-
       e.target.addSource(
         "markers-source",
         createMarkerFeatureCollection(markerInformation)
@@ -365,26 +363,42 @@ function ProtectedPage() {
   useEffect(() => {
     if (!map.current) return;
     if (navTabs === 0) {
-      if (map.current.getLayer("events-outline")) map.current.setLayoutProperty("events-outline", "visibility", "visible");
-      if (map.current.getLayer("events")) map.current.setLayoutProperty("events", "visibility", "visible");
-      if (map.current.getLayer("markers")) map.current.setLayoutProperty("markers", "visibility", "visible");
+      if (map.current.getLayer("events-outline"))
+        map.current.setLayoutProperty(
+          "events-outline",
+          "visibility",
+          "visible"
+        );
+      if (map.current.getLayer("events"))
+        map.current.setLayoutProperty("events", "visibility", "visible");
+      if (map.current.getLayer("markers"))
+        map.current.setLayoutProperty("markers", "visibility", "visible");
       return;
     }
-    if (navTabs === 1){
-      if (map.current.getLayer("events-outline")) map.current.setLayoutProperty("events-outline", "visibility", "none");
-      if (map.current.getLayer("events")) map.current.setLayoutProperty("events", "visibility", "none");
-      if (map.current.getLayer("markers")) map.current.setLayoutProperty("markers", "visibility", "visible");
+    if (navTabs === 1) {
+      if (map.current.getLayer("events-outline"))
+        map.current.setLayoutProperty("events-outline", "visibility", "none");
+      if (map.current.getLayer("events"))
+        map.current.setLayoutProperty("events", "visibility", "none");
+      if (map.current.getLayer("markers"))
+        map.current.setLayoutProperty("markers", "visibility", "visible");
       return;
     }
 
     if (navTabs === 2) {
-      if (map.current.getLayer("events-outline")) map.current.setLayoutProperty("events-outline", "visibility", "visible");
-      if (map.current.getLayer("events")) map.current.setLayoutProperty("events", "visibility", "visible");
-      if (map.current.getLayer("markers")) map.current.setLayoutProperty("markers", "visibility", "none");
+      if (map.current.getLayer("events-outline"))
+        map.current.setLayoutProperty(
+          "events-outline",
+          "visibility",
+          "visible"
+        );
+      if (map.current.getLayer("events"))
+        map.current.setLayoutProperty("events", "visibility", "visible");
+      if (map.current.getLayer("markers"))
+        map.current.setLayoutProperty("markers", "visibility", "none");
       return;
     }
-
-  } , [navTabs])
+  }, [navTabs]);
 
   return (
     <>
@@ -429,8 +443,40 @@ function ProtectedPage() {
                 อีเวนท์
               </button>
             </li>
+            <li className="d-flex align-items-center ps-3">
+              <label>Disable &nbsp;&nbsp;&nbsp;</label>
+              <div class="form-switch">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  role="switch"
+                  id="flexSwitchCheckDefault"
+                  defaultChecked={switchState}
+                  onChange={(e) => {
+                    setSwitchState((prevState) => (prevState + 1) % 2);
+                    let state = (switchState + 1) % 2;
+                    map.current.setFilter("markers", [
+                      "==",
+                      ["get", "enable"],
+                      state,
+                    ]);
+                    map.current.setFilter("events", [
+                      "==",
+                      ["get", "enable"],
+                      state,
+                    ]);
+                    map.current.setFilter("events-outline", [
+                      "==",
+                      ["get", "enable"],
+                      state,
+                    ]);
+                  }}
+                />
+              </div>
+              <label>&nbsp;&nbsp;&nbsp;Enable</label>
+            </li>
           </ul>
-          <div className="my-2 position-relative" style={{zIndex:"1"}}>
+          <div className="my-2 position-relative" style={{ zIndex: "1" }}>
             <div className="position-absolute end-0">
               <SearchBar
                 placeholder="ค้นหา"

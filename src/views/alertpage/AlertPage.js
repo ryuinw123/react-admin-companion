@@ -5,7 +5,7 @@ import Notification_Card from "../../components/notificationcard/Notification_Ca
 import "./AlertPage.css";
 import SearchIcon from "@material-ui/icons/Search";
 import CloseIcon from "@material-ui/icons/Close";
-import SortIcon from '@material-ui/icons/Sort';
+import SortIcon from "@material-ui/icons/Sort";
 
 const AlertPage = () => {
   const api = useAxios();
@@ -52,8 +52,9 @@ const AlertPage = () => {
     setActiveData(
       reportData.filter((data) => {
         return (
-          data.return_marker_id
-            ?.toLowerCase()
+          data.report_marker_id
+            ?.toString()
+            .toLowerCase()
             .includes(searchWord.toLowerCase()) ||
           data.reason?.toLowerCase().includes(searchWord.toLowerCase()) ||
           data.id
@@ -62,6 +63,14 @@ const AlertPage = () => {
             .includes(searchWord.toLowerCase()) ||
           data.details?.toLowerCase().includes(searchWord.toLowerCase()) ||
           data.created_user
+            ?.toString()
+            .toLowerCase()
+            .includes(searchWord.toLowerCase()) ||
+          data.report_event_id
+            ?.toString()
+            .toLowerCase()
+            .includes(searchWord.toLowerCase()) ||
+          data.event
             ?.toString()
             .toLowerCase()
             .includes(searchWord.toLowerCase())
@@ -75,13 +84,19 @@ const AlertPage = () => {
       <h1 className="alert-text ms-5">การแจ้งเตือนรายงาน</h1>
       <div className="container alert-text">
         <div className="d-flex justify-content-between align-items-center">
-          <button className="reset-style"
+          <button
+            className="reset-style"
             onClick={(e) => {
               e.preventDefault();
               setSort(!sort);
             }}
           >
-            <span><SortIcon style={{transform: sort ? "rotate(180deg)" : "rotate(0deg)",}}/></span> ปักหมุด
+            <span>
+              <SortIcon
+                style={{ transform: sort ? "rotate(180deg)" : "rotate(0deg)" }}
+              />
+            </span>{" "}
+            ปักหมุด
           </button>
           <div className="my-3">
             <div className="searchInputs">
@@ -89,7 +104,7 @@ const AlertPage = () => {
                 {searchWord.length === 0 && <SearchIcon />}
               </div>
               <input
-              className="border-0"
+                className="border-0"
                 type="text"
                 placeholder="ค้นหา"
                 value={searchWord}
