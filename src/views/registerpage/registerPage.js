@@ -7,11 +7,12 @@ function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
+  const [secret,setSecret] = useState("");
   const { registerUser } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    registerUser(username, password, password2);
+    registerUser(username, password, password2,secret);
   };
 
   return (
@@ -63,6 +64,22 @@ function Register() {
                   required
                 />
                 <p>{password2 !== password ? "Passwords do not match" : ""}</p>
+              </div>
+              <div className="my-3">
+                <label
+                  htmlFor="confirm-password"
+                  className="form-label float-start"
+                >
+                  รหัสลับ
+                </label>
+                <input
+                  type="text"
+                  id="secret"
+                  onChange={(e) => setSecret(e.target.value)}
+                  placeholder="รหัสลับ"
+                  className="form-control placeholder-input"
+                  required
+                />
               </div>
               <button type="submit" className="btn kmitl-button">
                 สมัครสมาชิก

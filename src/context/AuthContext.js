@@ -45,11 +45,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const registerUser = async (username, password, password2) => {
+  const registerUser = async (username, password, password2,secret) => {
     let data = JSON.stringify({
       username,
       password,
-      password2
+      password2,
+      secret
     })
     const response = await fetch(`${config.baseUrl}${config.register}`, {
       method: "POST",
@@ -59,13 +60,14 @@ export const AuthProvider = ({ children }) => {
       body: JSON.stringify({
         username,
         password,
-        password2
+        password2,
+        secret
       })
     });
     if (response.status === 201) {
       history.push("/login");
     } else {
-      alert("Something went wrong!");
+      alert("มีข้อผิดพลาดเกิดขึ้น");
       console.log(data)
     }
   };
