@@ -45,10 +45,6 @@ const AlertPage = () => {
   }, []);
 
   useEffect(() => {
-    setActiveData(activeData.reverse());
-  }, [sort]);
-
-  useEffect(() => {
     setActiveData(
       reportData.filter((data) => {
         return (
@@ -88,6 +84,7 @@ const AlertPage = () => {
             className="reset-style"
             onClick={(e) => {
               e.preventDefault();
+              setActiveData(activeData.slice().reverse());
               setSort(!sort);
             }}
           >

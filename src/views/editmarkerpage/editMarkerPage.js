@@ -492,7 +492,7 @@ const EditMarker = ({ match }) => {
                             <div className="row">
                               <h3>ส่วนที่เพิ่ม</h3>
                               {imageList.map((image, index) => (
-                                <div key={index} className="image-item col-3">
+                                <div key={index} className="image-item col-12 col-md-6 col-lg-3">
                                   <img
                                     src={image["data_url"]}
                                     alt=""
@@ -515,7 +515,7 @@ const EditMarker = ({ match }) => {
                     </div>
                     <div className="row">
                       {bImages?.map((image) => (
-                        <div key={image.id} className="image-item col-3">
+                        <div key={image.id} className="image-item col-12 col-md-6 col-lg-3">
                           <div className="col-3">
                             <img src={image.dataURL} alt="" width="100" />
                           </div>

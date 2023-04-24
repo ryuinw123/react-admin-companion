@@ -40,10 +40,10 @@ const Notification_Card = ({ data }) => {
       className="row border p-4 "
       style={cardStyle}
     >
-      <div className="col-1 text-center">
+      <div className="col-3 col-md-3 col-lg-1 text-center">
         <img src={data.report_event_id ? event : pin} alt="" />
       </div>
-      <div className="col-11">
+      <div className="col-9 col-md-9 col-lg-11">
         <div className="row">
           <b className="m-0 p-0">{data.reason}</b>
         </div>

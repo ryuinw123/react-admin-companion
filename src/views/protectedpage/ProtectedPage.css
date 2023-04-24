@@ -39,3 +39,28 @@
   border-bottom: solid 2px #ff5e00;
   color: #ff5e00;
 }
+
+.searchbar-position {
+  right: 0;
+}
+
+@media (max-width: 992px) {
+  .searchbar-position {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 768px) {
+  .searchbar-position {
+    left: 45%;
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 576px) {
+  .searchbar-position {
+    left: 42%;
+    transform: translateX(-50%);
+  }
+}

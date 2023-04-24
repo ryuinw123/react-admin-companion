@@ -411,8 +411,8 @@ function ProtectedPage() {
         </div>
       </div>
       <div className="container protected-text mb-5">
-        <div class="d-flex justify-content-between protected-list">
-          <ul className="nav my-2">
+        <div class="  d-block d-lg-flex justify-content-lg-between protected-list">
+          <ul className="nav justify-content-center justify-content-lg-start my-2">
             <li className={`map-nav ${navTabs == 0 ? "active" : ""}`}>
               <button
                 onClick={(e) => {
@@ -477,7 +477,7 @@ function ProtectedPage() {
             </li>
           </ul>
           <div className="my-2 position-relative" style={{ zIndex: "1" }}>
-            <div className="position-absolute end-0">
+            <div className="position-absolute searchbar-position">
               <SearchBar
                 placeholder="ค้นหา"
                 data={
