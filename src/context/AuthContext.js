@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import { useHistory } from "react-router-dom";
+import config from "../config/config";
 
 const AuthContext = createContext();
 
@@ -22,7 +23,7 @@ export const AuthProvider = ({ children }) => {
   const history = useHistory();
 
   const loginUser = async (username, password) => {
-    const response = await fetch("http://192.168.2.40:8000/api/token/", {
+    const response = await fetch(`${config.baseUrl}${config.token}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -50,7 +51,7 @@ export const AuthProvider = ({ children }) => {
       password,
       password2
     })
-    const response = await fetch("http://192.168.2.40:8000/api/register/", {
+    const response = await fetch(`${config.baseUrl}${config.register}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
