@@ -221,7 +221,6 @@ const EditMarker = ({ match }) => {
           console.log(e);
           Swal.fire(" อัพเดทข้อมูลล้มเหลว", "", "error");
         }
-        Swal.fire("อัพเดทข้อมูลสำเร็จ", "", "success");
       } else Swal.fire(" ยกเลิก", "", "error");
     });
   };
