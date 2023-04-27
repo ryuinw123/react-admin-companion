@@ -1,5 +1,6 @@
 import React from "react";
 import film from "../../images/img/film.png";
+import romtham from "../../images/img/romtham.png";
 import "./aboutPage.css"
 
 const aboutPage = () => {
@@ -16,12 +17,12 @@ const aboutPage = () => {
           </div>
           <div className="row">
             <div className="col-6">
-              <img src={film} alt="" className="img-fluid my-5" />
+              <img src={romtham} alt="" className="img-fluid my-5" />
               <p>62010758 นาย ร่มธรรม ตั้งสุนันท์ธรรม</p>
             </div>
             <div className="col-6">
               <img src={film} alt="" className="img-fluid my-5"/>
-              <p>62010893 นาย เป็นเกย์เฒ่า ในวันที่ดี</p>
+              <p>62010893 นาย ศุภนัฐ วันดี</p>
             </div>
           </div>
         </div>
